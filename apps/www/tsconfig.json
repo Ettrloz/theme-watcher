@@ -1,0 +1,19 @@
+{
+  "extends": "@ettrloz/typescript-standard/tsconfig/build",
+  "compilerOptions": {
+    "rootDir": "src",
+    "allowJs": true,
+    "checkJs": true,
+    "paths": {
+      "@ettrloz/theme-watcher": ["./../../packages/theme-watcher/src/index.js"],
+      "@ettrloz/theme-watcher/browser": ["./../../packages/theme-watcher/src/browser/index.js"]
+    }
+  },
+  "files": ["./../../definitions.d.ts"],
+  "include": ["src"],
+  "references": [
+    {
+      "path": "./../../packages/theme-watcher/tsconfig.json"
+    }
+  ]
+}

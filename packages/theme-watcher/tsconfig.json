@@ -1,0 +1,10 @@
+{
+  "extends": "@ettrloz/typescript-standard/tsconfig/build",
+  "compilerOptions": {
+    "composite": true,
+    "rootDir": "src",
+    "allowJs": true,
+    "checkJs": true
+  },
+  "include": ["src"]
+}

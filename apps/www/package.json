@@ -1,0 +1,29 @@
+{
+  "name": "www",
+  "private": true,
+  "scripts": {
+    "build": "npx vite build",
+    "dev": "npx vite dev --host --port 9001",
+    "preview": "npx vite preview --host --port 9002"
+  },
+  "dependencies": {
+    "@alpinejs/persist": "^3.16.1",
+    "@ettrloz/theme-watcher": "workspace:^",
+    "@unocss/reset": "^66.7.5",
+    "highlight.js": "^11.12.0",
+    "tippy.js": "^6.3.7"
+  },
+  "devDependencies": {
+    "@iconify-json/mdi": "^1.2.3",
+    "@iconify-json/tabler": "^1.2.38",
+    "@types/alpinejs": "^3.13.11",
+    "@types/alpinejs__persist": "^3.13.4",
+    "@unocss/preset-icons": "^66.7.5",
+    "@unocss/preset-web-fonts": "^66.7.5",
+    "alpinejs": "^3.16.1",
+    "eruda": "^3.4.3",
+    "unocss": "^66.7.5",
+    "vite": "^8.2.1",
+    "vite-plugin-minify": "^3.0.0"
+  }
+}

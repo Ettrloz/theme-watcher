@@ -1,0 +1,6 @@
+{
+  "extends": "@ettrloz/typescript-standard/tsconfig/base",
+  "compilerOptions": {
+    "noEmit": true
+  }
+}

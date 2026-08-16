@@ -1,0 +1,33 @@
+{
+  "name": "@ettrloz/theme-watcher",
+  "version": "1.0.0",
+  "description": "Simple and tiny theme watcher for browser",
+  "license": "MIT",
+  "author": "Ettrloz",
+  "files": [
+    "dist",
+    "types"
+  ],
+  "main": "./dist/cjs/index.cjs",
+  "module": "./dist/esm/index.mjs",
+  "types": "./types/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/esm/index.mjs",
+      "require": "./dist/cjs/index.cjs",
+      "types": "./types/index.d.ts"
+    },
+    "./browser": "./dist/browser.js"
+  },
+  "scripts": {
+    "build": "npx npm-run-all build-dist build-browser build-browser-min types",
+    "build-browser": "npx rolldown src/browser/index.js --file dist/browser.js --format iife --sourcemap",
+    "build-browser-min": "npx rolldown src/browser/index.js --file dist/browser.min.js --format iife --minify --sourcemap",
+    "build-dist": "npx rolldown --config rolldown.config.mjs",
+    "types": "npx tsc --emitDeclarationOnly --declarationDir types"
+  },
+  "devDependencies": {
+    "rolldown": "^1.2.4",
+    "tinyglobby": "^0.2.17"
+  }
+}

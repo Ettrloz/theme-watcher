@@ -1,0 +1,267 @@
+<!doctype html>
+<html
+  lang="en"
+  class="font-sans h-full *:transition-all [&_button]:select-none [&_*:where(h1,h2,h3,h4,h5,h6)]:font-600"
+  data-theme-watcher-config='{
+    "lightScheme": "black",
+    "darkScheme": "white"
+  }'
+  x-data="{
+    withJs: false,
+    modes: [
+      'light',
+      'auto',
+      'dark'
+    ],
+    iconModes: {
+      light: 'i-tabler-sun',
+      dark: 'i-tabler-moon',
+      auto: 'i-tabler-device-desktop'
+    },
+    socials: {
+      github: {
+        icon: 'i-tabler-brand-github',
+        class: 'text-white bg-[#232925]',
+        link: 'https://github.com/Ettrloz'
+      },
+      facebook: {
+        icon: 'i-tabler-brand-facebook',
+        class: 'text-white bg-[#1877F2]',
+        link: 'https://facebook.com/profile.php?id=61553841310789'
+      },
+      instagram: {
+        icon: 'i-tabler-brand-instagram',
+        class: 'text-white bg-[#833ab4] bg-[linear-gradient(to_right,#833ab4,#fd1d1d,#fcb045)]',
+        link: 'https://instagram.com/@ettrloz'
+      },
+      x: {
+        icon: 'i-tabler-brand-x',
+        class: 'text-white bg-black',
+        link: 'https://x.com/@ettrloz'
+      }
+    },
+    getCurrent() {
+      return window.themeWatcher.current;
+    },
+    getActual() {
+      return document.documentElement.getAttribute('data-theme-watcher-actual');
+    },
+    capitalize(value) {
+      return value[0].toUpperCase() + value.slice(1);
+    },
+    activeTab: $persist(0).as(/\.github\.io/.test(window.location.origin) ? `${window.location.pathname}activeTab` : 'activeTab')
+  }"
+  x-init="withJs = true"
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Theme Watcher</title>
+    <meta name="description" content="Simple and tiny theme watcher for browser" />
+    <meta name="keywords" content="HTML, CSS, JavaScript, Theme, Watcher, Theme Switcher" />
+    <meta name="author" content="Ettrloz" />
+    <meta property="og:title" content="Theme Watcher" />
+    <meta property="og:description" content="Simple and tiny theme watcher for browser" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://ettrloz.github.io/theme-watcher" />
+    <meta property="og:site_name" content="ettrloz.github.com" />
+    <meta property="og:locale" content="en_US" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@ettrloz" />
+    <meta name="twitter:creator" content="@ettrloz" />
+    <meta name="twitter:title" content="Theme Watcher" />
+    <meta name="twitter:description" content="Simple and tiny theme watcher for browser" />
+    <script src="./src/head-init.ts" type="module"></script>
+    <style>
+      pre {
+        width: 100%;
+        min-width: 0;
+        max-width: 100%;
+        overflow-x: auto;
+      }
+
+      pre code.hljs {
+        display: block;
+        overflow: visible;
+        white-space: pre;
+      }
+    </style>
+  </head>
+  <body
+    class="min-h-full"
+    :class="withJs ? 'with-js' : 'no-js'"
+    x-data="{
+      current: getCurrent(),
+      actual: getActual(),
+      isClipboardApi() {
+        return window.navigator.clipboard && window.isSecureContext;
+      },
+      async copyClipboard(text) {
+        if (this.isClipboardApi()) {
+          try {
+            await navigator.clipboard.writeText(text);
+
+            return;
+          } catch (error) {
+            console.error(error);
+          }
+        }
+
+        this.fallbackCopyClipboard(text);
+      },
+      fallbackCopyClipboard(text) {
+        const dummy = document.createElement('textarea');
+
+        dummy.value = text;
+        dummy.style.position = 'fixed';
+        dummy.style.top = '-10000000px';
+        dummy.style.left = '-10000000px';
+
+        document.body.appendChild(dummy);
+
+        dummy.focus();
+        dummy.select();
+
+        document.execCommand('copy');
+
+        dummy.remove();
+      }
+    }"
+  >
+    <main
+      class="fixed top-1/2 left-1/2 -translate-1/2 flex flex-col justify-center items-center w-[min(100%-1rem,720px)] h-[min(100%-1rem,720px)] p-4 gap-10 text-black bg-light-300 shadow opacity-0 z-10 transition-duration-150 transition-property-opacity dark:text-light-3 dark:bg-dark-8 <sm:w-full <sm:h-full sm:min-w-[420px] sm:max-h-[calc(100%-1rem)] sm:rounded-xl"
+      :class="withJs && 'opacity-100'"
+      x-data="{
+        tabs: [
+          {
+            icon: 'i-tabler-home',
+            name: 'home'
+          },
+          {
+            icon: 'i-tabler-api',
+            name: 'API'
+          },
+          {
+            icon: 'i-tabler-info-circle',
+            name: 'about'
+          }
+        ]
+      }"
+    >
+      <div class="flex flex-col justify-center overflow-y-auto grow-1 p-2 min-w-0 w-full">
+        <div class="w-full min-w-0" x-show="activeTab === 0">
+          <div class="text-center mb-10">
+            <h1 class="text-2xl font-600">Theme Watcher</h1>
+            <p>
+              Your current theme is
+              <span x-text="actual"></span>
+            </p>
+          </div>
+          <div
+            class="w-full justify-center flex flex-wrap gap-2"
+            role="group"
+            x-data="{
+              active: current
+            }"
+          >
+            <template x-for="mode in modes">
+              <button
+                class="inline-flex items-center px-4 py-2 gap-2 rounded-lg transition-all"
+                :class="{
+            'data-[active]:text-black data-[active]:bg-light-800': mode === 'light',
+            'data-[active]:text-black data-[active]:bg-light-800 dark:data-[active]:text-white dark:data-[active]:bg-dark-300': mode === 'auto',
+            'data-[active]:text-white data-[active]:bg-dark-300': mode === 'dark'
+          }"
+                :data-active="active === mode"
+                @click="window.themeWatcher.update(mode), active = mode, actual = getActual()"
+              >
+                <div aria-hidden :class="iconModes[mode]"></div>
+                <span x-text="capitalize(mode)"></span>
+              </button>
+            </template>
+          </div>
+        </div>
+        <div class="w-full min-w-0" x-show="activeTab === 1">
+          <div class="text-center mb-10">
+            <h2 class="text-xl">API</h2>
+            <p>Description how to use Theme Watcher</p>
+          </div>
+          <h3>Installation</h3>
+          <p>We recommended to use cdn for quick installation.</p>
+          <div
+            class="relative my-4"
+            x-data="{
+              showCopyButton: false
+            }"
+            @pointerenter="showCopyButton = true"
+            @mouseleave="showCopyButton = false"
+            @click.outside="showCopyButton = false"
+          >
+            <pre
+              class="w-full min-w-0 overflow-x-auto m-0 p-0 rounded-md"
+              x-ref="code"
+            ><code x-text="'<script src=\'https://cdnjs.delivr.com/@ettrloz/theme-watcher/dist/browser.js\'></script>'.replace(/\'/g, String.fromCharCode(0x22))"></code></pre>
+            <div
+              class="absolute top-1/2 right-0 mr-2 z-11 -translate-y-1/2"
+              x-data="{
+                copied: false
+              }"
+              x-show="showCopyButton"
+              @click="copied = true, copyClipboard($refs.code.textContent)"
+            >
+              <button class="p-2 bg-dark/5 rounded-md dark:bg-light/20" aria-label="Copy">
+                <div class="i-tabler-copy" aria-hidden x-show="!copied"></div>
+                <div class="i-tabler-check" aria-hidden x-show="copied"></div>
+              </button>
+            </div>
+          </div>
+          <p>
+            Copy this snippet code then put inside your <code x-text="'<head>'"></code> tag and
+            everything done, the theme watcher will automatically started!
+          </p>
+        </div>
+        <div class="w-full min-w-0" x-show="activeTab === 2">
+          <div class="text-center mb-10">
+            <h2 class="text-xl">Another Awesome Project</h2>
+            <p>This project is part of my experiments; I enjoy creating things and sharing them</p>
+          </div>
+          <div class="flex flex-col flex-wrap">
+            <div class="mb-6">
+              <h3 class="text-lg">Interested?</h3>
+              <p>Say what you want; I am ready whenever you need me.</p>
+            </div>
+            <div class="flex flex-wrap gap-2">
+              <template x-for="(data, name) in socials">
+                <a
+                  class="inline-flex items-center px-4 py-2 gap-2 rounded-lg transition-all"
+                  :class="data.class"
+                  :href="data.link"
+                >
+                  <div aria-hidden :class="data.icon"></div>
+                  <span x-text="name === 'x' ? 'X (Twitter)' : capitalize(name)"></span>
+                </a>
+              </template>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="flex flex-wrap gap-2">
+        <template x-for="(tab, index) in tabs">
+          <button
+            class="p-2 rounded-lg transition-all data-[active]:text-black data-[active]:bg-light-8 dark:data-[active]:text-white dark:data-[active]-bg-dark-3"
+            :aria-label="capitalize(tab.name)"
+            :data-active="activeTab === index"
+            :data-tippy-content="capitalize(tab.name)"
+            @click="activeTab = index"
+          >
+            <div class="w-[24px] h-[24px]" aria-hidden :class="tab.icon"></div>
+          </button>
+        </template>
+      </div>
+    </main>
+    <div
+      class="fixed top-1/2 left-1/2 -translate-1/2 w-full h-full bg-black/10 dark:bg-black/60"
+    ></div>
+    <script src="./src/main.ts" type="module"></script>
+  </body>
+</html>
