@@ -2,10 +2,6 @@
 <html
   lang="en"
   class="font-sans h-full *:transition-all [&_button]:select-none [&_*:where(h1,h2,h3,h4,h5,h6)]:font-600"
-  data-theme-watcher-config='{
-    "lightScheme": "black",
-    "darkScheme": "white"
-  }'
   x-data="{
     withJs: false,
     modes: [
@@ -71,6 +67,12 @@
     <meta name="twitter:creator" content="@ettrloz" />
     <meta name="twitter:title" content="Theme Watcher" />
     <meta name="twitter:description" content="Simple and tiny theme watcher for browser" />
+    <script>
+      window.themeWatcherOption = {
+        lightScheme: '#dedede',
+        darkScheme: '#333'
+      };
+    </script>
     <script src="./src/head-init.ts" type="module"></script>
     <style>
       pre {

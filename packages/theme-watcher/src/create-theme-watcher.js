@@ -7,14 +7,10 @@ import {
 } from './constants';
 import { insertMetaColorScheme, isStarted, matchDark, readConfig } from './utils';
 
-/** @typedef {import('./types').Listener} Listener */
-/** @typedef {import('./types').ThemeMode} ThemeMode */
-/** @typedef {import('./types').ThemeModeActual} ThemeModeActual */
-/** @typedef {import('./types').ThemeWatcherInstance} ThemeWatcherInstance */
-/** @typedef {import('./types').ThemeWatcherOption} ThemeWatcherOption */
+/** @import { Listener, ThemeMode, ThemeModeActual, ThemeWatcherInstance, ThemeWatcherOption } from './types'*/
 
 /**
- * Create theme watcher.
+ * Create theme watcher instance.
  *
  * @return {ThemeWatcherInstance}
  */
@@ -49,7 +45,17 @@ export function createThemeWatcher() {
     }
   }
 
+  function checkIsStarted() {
+    if (!started) {
+      throw new Error('Theme watcher not started yet, did you mean to call `.start()` first?');
+    }
+  }
+
   function start() {
+    if (isStarted()) {
+      throw new Error('Could cannot start theme watcher twice.');
+    }
+
     started = true;
 
     html.setAttribute(ATTR_THEME_WATCHER_STARTED, '');
@@ -80,9 +86,7 @@ export function createThemeWatcher() {
    * @param {ThemeMode} value
    */
   function update(value) {
-    if (!started) {
-      throw new Error('Theme watcher not started yet, did you mean to call `.start()` first?');
-    }
+    checkIsStarted();
 
     if (!/light|dark|auto/.test(value)) {
       throw new Error(`Unexpected value '${value}', expected light, dark, auto`);
@@ -121,6 +125,8 @@ export function createThemeWatcher() {
    * @type {ThemeWatcherInstance['createListener']}
    */
   function createListener(name, fn, runImmediate) {
+    checkIsStarted();
+
     listener.set(name, fn);
 
     if (runImmediate) {
@@ -132,6 +138,8 @@ export function createThemeWatcher() {
    * @type {ThemeWatcherInstance['removeListener']}
    */
   function removeListener(name) {
+    checkIsStarted();
+
     listener.delete(name);
   }
 

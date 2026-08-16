@@ -41,26 +41,28 @@ export function isStarted() {
 }
 
 /**
- * Read config from specified data attribute if present.
+ * Read config from specified data attribute, if not present this will read config from `window.themeWatcherOption`.
  *
  * @return {Partial<ThemeWatcherOption>}
  */
 export function readConfig() {
-  if (!html.hasAttribute(ATTR_THEME_WATCHER_CONFIG)) {
-    return {};
+  const content = html.getAttribute(ATTR_THEME_WATCHER_CONFIG);
+
+  if (content) {
+    try {
+      const parsed = JSON.parse(content);
+
+      return parsed;
+    } catch (error) {
+      console.error(error);
+    }
   }
 
-  const content = /** @type {string} */ (html.getAttribute(ATTR_THEME_WATCHER_CONFIG));
-
-  try {
-    const parsed = JSON.parse(content);
-
-    return parsed;
-  } catch (error) {
-    console.error(error);
-
-    return {};
+  if (Object.hasOwn(window, 'themeWatcherOption')) {
+    return /** @type {any} */ (window).themeWatcherOption;
   }
+
+  return {};
 }
 
 /** @internal */
